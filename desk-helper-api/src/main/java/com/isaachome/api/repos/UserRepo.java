@@ -4,7 +4,7 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 
 import com.isaachome.api.entity.User;
 
-public interface UserRepository extends MongoRepository<User, String>{
+public interface UserRepo extends MongoRepository<User, String>{
 
 	User  findByEmail(String email);
 }
