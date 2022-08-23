@@ -4,10 +4,13 @@ import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
+
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
@@ -84,6 +87,17 @@ public class JwtTokenUtil implements Serializable {
 		final String username = getUsernameFromToken(token);
 		return (username.equals(user.getUsername()) && !isTokenExpired(token));
 	}
+	public String generateToken(UserDetails userDetails) {
+		Map<String, Object> claims = new HashMap<>();
+
+		claims.put(CLAIM_KEY_USERNAME, userDetails.getUsername());
+
+		final Date createdDate = new Date();
+		claims.put(CLAIM_KEY_CREATED, createdDate);
+
+		return doGenerateToken(claims);
+	}
+
 
 	private Boolean isTokenExpired(String token) {
 		return getExpirationDateFromToken(token).isBefore(LocalDate.now());
