@@ -1,4 +1,4 @@
-package com.isaachome.api;
+package com.isaachome.controller;
 
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

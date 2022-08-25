@@ -19,15 +19,14 @@ public interface UserRepo extends MongoRepository<User, String> {
 	// value where condition
 	// fields: select items: 1 => included, 0 => exclude
 	// sort:1 => ASC , -1 => DESC
-	@Query(value = "{country : ?0 }", fields = "{ name: 1,_id:0 }", sort = "{name:-1}")
+	@Query(value = "{country : ?0 }", fields = "{ email: 1,_id:0 }", sort = "{email:-1}")
 	List<User> findByCountryAsCustom(String country);
 
 	// select country, sum(1) =count(*) from users group by country
 	@Aggregation("{ $group: { _id: $country, total : {$sum : 1 } } }")
 	List<CountryAggregation> countByCountry();
-	
 
-	// select country, [names] from users group by country
-	@Aggregation("{ $group: { _id: $country, names : { $addToSet : $name } } }")
+    //select country, [names] from user group by country
+    @Aggregation("{ $group: { _id : $country, names : { $addToSet : $email } } }")
 	List<UserAggregation> groupByCountry();
 }
