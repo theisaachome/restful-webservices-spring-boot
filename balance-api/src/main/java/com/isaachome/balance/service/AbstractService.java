@@ -1,4 +1,4 @@
-package com.isaachome.balance;
+package com.isaachome.balance.service;
 
 import java.util.List;
 import java.util.Map;
@@ -15,7 +15,7 @@ public abstract class AbstractService<T,ID extends Number> {
 		this.repo = repo;
 	}
 	@Transactional
-	public abstract T update (T t);
+	public abstract T update (ID id,T t);
 	
 	public T save(T t) {
 		return repo.save(t);
