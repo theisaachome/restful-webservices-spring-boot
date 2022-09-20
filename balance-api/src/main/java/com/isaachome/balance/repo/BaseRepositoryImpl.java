@@ -9,8 +9,10 @@ import javax.persistence.TypedQuery;
 import org.springframework.data.jpa.repository.support.JpaEntityInformation;
 import org.springframework.data.jpa.repository.support.SimpleJpaRepository;
 
-public class BaseRepositoryImpl<T, ID> extends SimpleJpaRepository<T, ID> implements BaseRepository<T, ID> {
 
+public class BaseRepositoryImpl<T, ID> extends SimpleJpaRepository<T, ID> 
+implements BaseRepository<T, ID>{
+	
 	private EntityManager em;
 
 	public BaseRepositoryImpl(JpaEntityInformation<T, ?> entityInformation, EntityManager entityManager) {
@@ -20,13 +22,15 @@ public class BaseRepositoryImpl<T, ID> extends SimpleJpaRepository<T, ID> implem
 
 	@Override
 	public List<T> search(String jpql, Map<String, Object> params) {
+		
 		TypedQuery<T> query = em.createQuery(jpql, getDomainClass());
-
-		if (null != params) {
-			for (String key : params.keySet()) {
+		
+		if(null != params) {
+			for(String key : params.keySet()) {
 				query.setParameter(key, params.get(key));
 			}
 		}
+		
 		return query.getResultList();
 	}
 

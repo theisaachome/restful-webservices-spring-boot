@@ -10,7 +10,7 @@ import com.isaachome.balance.service.CategoryService;
 
 @RestController
 @RequestMapping("categories")
-public class CategoryController extends AbstractController<Category,Long> {
+public class CategoryController extends AbstractController<Category,Integer> {
 
 	private CategoryService service;
 	public CategoryController(CategoryService service) {

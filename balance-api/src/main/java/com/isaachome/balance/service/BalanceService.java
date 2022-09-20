@@ -11,20 +11,22 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.isaachome.balance.entity.Balance;
-import com.isaachome.balance.entity.BalanceDetail;
+import com.isaachome.balance.entity.BalanceDetails;
 import com.isaachome.balance.entity.Type;
-import com.isaachome.balance.repo.BalanceDetailRepo;
+import com.isaachome.balance.repo.BalanceDetailsRepo;
 import com.isaachome.balance.repo.BalanceRepo;
 
 @Service
 public class BalanceService extends AbstractService<Balance, Long> {
 
 	@Autowired
-	private BalanceDetailRepo detailsRepo;
+	private BalanceDetailsRepo detailsRepo;
+
 
 	public BalanceService(BalanceRepo repo) {
 		super(repo);
 	}
+
 
 	@Override
 	public Balance update(Long id, Balance data) {
@@ -37,9 +39,9 @@ public class BalanceService extends AbstractService<Balance, Long> {
 	}
 
 	@Transactional
-	public Balance save(Long id, List<BalanceDetail> details) {
+	public Balance save(Long id, List<BalanceDetails> details) {
 		Balance balance = findById(id);
-		for (BalanceDetail d : details) {
+		for (BalanceDetails d : details) {
 			if (d.getId() == 0) {
 				d.setBalance(balance);
 				detailsRepo.save(d);
@@ -51,12 +53,12 @@ public class BalanceService extends AbstractService<Balance, Long> {
 				}
 			}
 		}
-		List<BalanceDetail> list = detailsRepo.findByBalanceId(id);
+		List<BalanceDetails> list = detailsRepo.findByBalanceId(id);
 		balance.setTotal(list.stream().mapToInt(d -> d.getAmount()).sum());
 		return balance;
 	}
 
-	public List<BalanceDetail> findDetails(Long id) {
+	public List<BalanceDetails> findDetails(Long id) {
 		return detailsRepo.findByBalanceId(id);
 	}
 
@@ -88,7 +90,7 @@ public class BalanceService extends AbstractService<Balance, Long> {
 		return search(sb.toString(), params);
 	}
 
-	public List<BalanceDetail> searchDetails(Type type, int category, LocalDate from, LocalDate to) {
+	public List<BalanceDetails> searchDetails(Type type, int category, LocalDate from, LocalDate to) {
 		StringBuffer sb = new StringBuffer("select b from BalanceDetails b where 1 = 1");
 		Map<String, Object> params = new HashMap<>();
 		
@@ -117,3 +119,4 @@ public class BalanceService extends AbstractService<Balance, Long> {
 
 
 }
+

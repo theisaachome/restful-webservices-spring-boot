@@ -12,14 +12,14 @@ import com.isaachome.balance.entity.Type;
 import com.isaachome.balance.repo.CategoryRepo;
 
 @Service
-public class CategoryService extends AbstractService<Category, Long>{
+public class CategoryService extends AbstractService<Category, Integer>{
 
 	public CategoryService(CategoryRepo repo) {
 		super(repo);
 	}
 
 	@Override
-	public Category update(Long id, Category t) {
+	public Category update(Integer id, Category t) {
 		Category result = findById(id);
 		result.setName(t.getName());
 		result.setType(t.getType());

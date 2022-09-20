@@ -11,13 +11,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import com.isaachome.balance.entity.Balance;
-import com.isaachome.balance.entity.BalanceDetail;
+import com.isaachome.balance.entity.BalanceDetails;
 import com.isaachome.balance.entity.Type;
 import com.isaachome.balance.service.BalanceService;
 
 @RestController
 @RequestMapping("balance")
-public class BalanceController extends AbstractController<Balance,Long>{
+public class BalanceController
+extends AbstractController<Balance,Long>{
 
 	private BalanceService service;
 
@@ -37,7 +38,7 @@ public class BalanceController extends AbstractController<Balance,Long>{
 	}
 	
 	@GetMapping("details")
-	public List<BalanceDetail> searchDetails(
+	public List<BalanceDetails> searchDetails(
 			@RequestParam(required = false) Type type, 
 			@RequestParam(required = false, defaultValue = "0") int category, 
 			@RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd")   LocalDate from, 
@@ -46,21 +47,21 @@ public class BalanceController extends AbstractController<Balance,Long>{
 	}
 
 	@GetMapping("details/{id}")
-	public List<BalanceDetail> getDetails(@PathVariable long id) {
+	public List<BalanceDetails> getDetails(@PathVariable long id) {
 		return service.findDetails(id);
 	}
 	
 	@PostMapping("details/{id}")
 	public Balance createDetails(
 			@PathVariable long id, 
-			@RequestBody List<BalanceDetail> details) {
+			@RequestBody List<BalanceDetails> details) {
 		return service.save(id, details);
 	}
 
 	@PutMapping("details/{id}")
 	public Balance updateDetails(
 			@PathVariable long id, 
-			@RequestBody List<BalanceDetail> details) {
+			@RequestBody List<BalanceDetails> details) {
 		return service.save(id, details);
 	}
 	

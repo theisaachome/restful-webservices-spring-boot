@@ -14,18 +14,19 @@ public abstract class AbstractService<T,ID extends Number> {
 	public AbstractService(BaseRepository<T, ID> repo) {
 		this.repo = repo;
 	}
+
 	@Transactional
-	public abstract T update (ID id,T t);
-	
-	public T save(T t) {
-		return repo.save(t);
+	public abstract T update(ID id, T data);
+
+	public T save(T data) {
+		return repo.save(data);
 	}
-	
+
 	public T findById(ID id) {
 		return repo.findById(id).orElseThrow();
 	}
-	
-	protected List<T> search(String jpql,Map<String,Object> params){
-		return repo.search(jpql,params);
+
+	protected List<T> search(String jpql, Map<String, Object> params) {
+		return repo.search(jpql, params);
 	}
 }

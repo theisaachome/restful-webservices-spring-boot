@@ -11,7 +11,7 @@ import lombok.Data;
 
 @Data
 @Entity
-public class BalanceDetail {
+public class BalanceDetails {
 
 	
 	@Id
