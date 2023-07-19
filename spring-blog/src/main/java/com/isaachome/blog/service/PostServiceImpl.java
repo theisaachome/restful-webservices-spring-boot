@@ -3,7 +3,12 @@ package com.isaachome.blog.service;
 import com.isaachome.blog.entity.Post;
 import com.isaachome.blog.exception.ResourceNotFoundException;
 import com.isaachome.blog.payload.PostDTO;
+import com.isaachome.blog.payload.PostResponse;
 import com.isaachome.blog.repos.PostRepos;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -25,8 +30,22 @@ public class PostServiceImpl implements   PostService{
     }
 
     @Override
-    public List<PostDTO> getAllPosts() {
-        return repos.findAll().stream().map(this::mapToDTO).collect(Collectors.toList());
+    public PostResponse  getAllPosts(int pageNo,int pageSize, String sortBy, String sortDir) {
+        Sort sort =sortDir.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortBy).ascending():Sort.by(sortBy).descending();
+        Pageable pageable = PageRequest.of(pageNo,pageSize,sort);
+        Page<Post> posts = repos.findAll(pageable);
+        List<Post> listOfPosts = posts.getContent();
+       List<PostDTO> contents= listOfPosts.stream().map(this::mapToDTO).collect(Collectors.toList());
+        PostResponse postResponse = new PostResponse(
+                contents,
+                posts.getNumber(),
+                posts.getSize(),
+                posts.getTotalElements(),
+                posts.getTotalPages(),
+                posts.isLast()
+        );
+        return  postResponse;
+
     }
 
     @Override
@@ -47,7 +66,8 @@ public class PostServiceImpl implements   PostService{
 
     @Override
     public void deletePost(long id) {
-
+      Post post=  repos.findById(id).orElseThrow(()-> new ResourceNotFoundException("Post","id",id));
+      repos.delete(post);
     }
     // convert Entity into DTO
     private  PostDTO mapToDTO(Post post){
