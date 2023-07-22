@@ -9,6 +9,7 @@ import com.isaachome.blog.repos.PostRepos;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class CommentServiceImpl implements  CommentService{
@@ -31,7 +32,7 @@ public class CommentServiceImpl implements  CommentService{
 
     @Override
     public List<CommentDTO> getCommentsByPostId(long postId) {
-        return null;
+        return repos.findByPostId(postId).stream().map(this::mapToDTO).collect(Collectors.toList());
     }
 
     @Override
