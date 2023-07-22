@@ -19,4 +19,8 @@ public class Comment {
     private  String email;
     private  String content;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "post_id",nullable = false)
+    private  Post post;
+
 }
