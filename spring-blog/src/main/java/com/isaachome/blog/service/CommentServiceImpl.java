@@ -2,10 +2,12 @@ package com.isaachome.blog.service;
 
 import com.isaachome.blog.entity.Comment;
 import com.isaachome.blog.entity.Post;
+import com.isaachome.blog.exception.BlogAPIException;
 import com.isaachome.blog.exception.ResourceNotFoundException;
 import com.isaachome.blog.payload.CommentDTO;
 import com.isaachome.blog.repos.CommentRepos;
 import com.isaachome.blog.repos.PostRepos;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -37,7 +39,12 @@ public class CommentServiceImpl implements  CommentService{
 
     @Override
     public CommentDTO getCommentById(long postId, long commentId) {
-        return null;
+        Post post = postRepos.findById(postId).orElseThrow(()-> new ResourceNotFoundException("Post","ID",postId));
+        Comment comment = repos.findById(commentId).orElseThrow(()-> new ResourceNotFoundException("Comment","ID",commentId));
+        if(!post.getId().equals(comment.getPost().getId())){
+            throw  new BlogAPIException(HttpStatus.BAD_REQUEST,"Comment does not belong to POST");
+        }
+        return mapToDTO(comment);
     }
 
     @Override
