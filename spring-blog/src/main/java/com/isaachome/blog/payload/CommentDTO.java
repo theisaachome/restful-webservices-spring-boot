@@ -1,4 +1,11 @@
 package com.isaachome.blog.payload;
 
-public record CommentDTO(long id,String name,String email,String content) {
+import lombok.Data;
+
+@Data
+public class CommentDTO {
+    private long id;
+    private String name;
+    private String content;
+    private String email;
 }

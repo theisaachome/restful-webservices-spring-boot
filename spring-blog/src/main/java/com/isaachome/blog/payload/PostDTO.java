@@ -1,4 +1,10 @@
 package com.isaachome.blog.payload;
 
-public record PostDTO(long id,String title,String description,String content) {
+import lombok.Data;
+
+import java.util.Set;
+
+@Data
+public class PostDTO {
+    private long id;private String title;private String description;private  String content; private Set<CommentDTO> comments;
 }

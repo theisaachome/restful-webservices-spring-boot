@@ -5,6 +5,7 @@ import com.isaachome.blog.exception.ResourceNotFoundException;
 import com.isaachome.blog.payload.PostDTO;
 import com.isaachome.blog.payload.PostResponse;
 import com.isaachome.blog.repos.PostRepos;
+import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -17,9 +18,11 @@ import java.util.stream.Collectors;
 @Service
 public class PostServiceImpl implements   PostService{
     private final PostRepos repos;
+    private ModelMapper mapper;
 
-    public PostServiceImpl(PostRepos repos) {
+    public PostServiceImpl(PostRepos repos,ModelMapper mapper) {
         this.repos = repos;
+        this.mapper=mapper;
     }
 
     @Override
@@ -57,9 +60,9 @@ public class PostServiceImpl implements   PostService{
     @Override
     public PostDTO updatePost(PostDTO dto, long id) {
         Post post = repos.findById(id).orElseThrow(()->new ResourceNotFoundException("Post","id",id));
-        post.setTitle(dto.title());
-        post.setDescription(dto.description());
-        post.setContent(dto.content());
+        post.setTitle(dto.getTitle());
+        post.setDescription(dto.getDescription());
+        post.setContent(dto.getContent());
         Post updatedPost=repos.save(post);
         return mapToDTO(updatedPost);
     }
@@ -71,16 +74,18 @@ public class PostServiceImpl implements   PostService{
     }
     // convert Entity into DTO
     private  PostDTO mapToDTO(Post post){
-        PostDTO postDTO  = new PostDTO(post.getId(),post.getTitle(),post.getDescription(),post.getContent());
+//        PostDTO postDTO  = new PostDTO(post.getId(),post.getTitle(),post.getDescription(),post.getContent());
+        PostDTO postDTO = mapper.map(post,PostDTO.class);
         return  postDTO;
     }
     // convert DTO into DTO
     private  Post mapToPost(PostDTO dto){
-        Post post = new Post();
-        post.setId(dto.id());
-        post.setTitle(dto.title());
-        post.setContent(dto.content());
-        post.setDescription(dto.description());
+        Post post = mapper.map(dto,Post.class);
+//        Post post = new Post();
+//        post.setId(dto.id());
+//        post.setTitle(dto.title());
+//        post.setContent(dto.content());
+//        post.setDescription(dto.description());
         return  post;
     }
 }
