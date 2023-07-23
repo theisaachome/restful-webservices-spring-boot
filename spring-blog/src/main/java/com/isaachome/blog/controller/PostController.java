@@ -5,6 +5,7 @@ import com.isaachome.blog.payload.PostResponse;
 import com.isaachome.blog.service.PostService;
 import com.isaachome.blog.util.AppConstants;
 import jakarta.persistence.PostUpdate;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,7 +28,7 @@ public class PostController {
     }
     // create blog post rest api
     @PostMapping
-    public ResponseEntity<PostDTO> createPost(@RequestBody PostDTO postDTO){
+    public ResponseEntity<PostDTO> createPost(@Valid @RequestBody PostDTO postDTO){
         return  new ResponseEntity<>(postService.createPost(postDTO), HttpStatus.CREATED);
     }
 
@@ -38,7 +39,7 @@ public class PostController {
 
 
     @PutMapping("/{id}")
-    public ResponseEntity<PostDTO> updatePost(@RequestBody PostDTO postDTO,@PathVariable(name="id")long id){
+    public ResponseEntity<PostDTO> updatePost(@Valid @RequestBody PostDTO postDTO,@PathVariable(name="id")long id){
         PostDTO responsePost = postService.updatePost(postDTO,id);
         return  new ResponseEntity<>(responsePost,HttpStatus.OK);
     }
