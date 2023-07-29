@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -22,16 +23,16 @@ public class SecurityConfig {
         return  new BCryptPasswordEncoder();
     }
 
+    @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-       return http.csrf((c)->c.disable())
+        http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(
-                        (authorize)->{
-                            authorize
-                                    .requestMatchers(HttpMethod.GET,"/api/**")
-                                    .permitAll()
-                    .requestMatchers("/api/auth/**").permitAll()
-                    .anyRequest()
-                    .authenticated();
-        }).build();
+                        (authorize) -> {
+//                            authorize.requestMatchers(HttpMethod.GET, "/api/**").permitAll()
+//                                    .requestMatchers("/api/auth/**").permitAll()
+//                                    .anyRequest().authenticated();
+                            authorize.anyRequest().permitAll();
+                        });
+        return http.build();
     }
 }
