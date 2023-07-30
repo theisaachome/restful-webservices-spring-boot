@@ -9,6 +9,10 @@ import com.isaachome.blog.payload.RegisterDto;
 import com.isaachome.blog.repos.RoleRepo;
 import com.isaachome.blog.repos.UserRepo;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -17,19 +21,25 @@ import java.util.Set;
 
 @Service
 public class AuthServiceImpl implements   AuthService{
+    private  final AuthenticationManager authenticationManager;
     private final  UserRepo userRepo;
     private final PasswordEncoder passwordEncoder;
     private  final RoleRepo roleRepo;
 
-    public AuthServiceImpl(UserRepo userRepo,RoleRepo roleRepo,PasswordEncoder passwordEncoder) {
+    public AuthServiceImpl(UserRepo userRepo,RoleRepo roleRepo,PasswordEncoder passwordEncoder,AuthenticationManager authenticationManager) {
         this.userRepo = userRepo;
         this.roleRepo = roleRepo;
         this.passwordEncoder = passwordEncoder;
+        this.authenticationManager =authenticationManager;
     }
 
     @Override
     public String login(LoginDto loginDto) {
-        return null;
+        Authentication authentication =authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(loginDto.usernameOrEmail(),loginDto.password())
+        );
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        return "login Successful";
     }
 
     @Override
