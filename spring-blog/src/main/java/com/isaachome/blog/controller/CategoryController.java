@@ -29,6 +29,10 @@ public class CategoryController {
         return  new ResponseEntity<>(categoryService.addCategory(dto), HttpStatus.CREATED);
     }
     // update category
+    @PutMapping("{id}")
+    public ResponseEntity<CategoryDto> updateCategory(@RequestBody CategoryDto dto,@PathVariable("id") long categoryId){
+      return  new ResponseEntity<>(categoryService.updateCategory(dto,categoryId),HttpStatus.ACCEPTED);
+    }
     // get Category by ID
     @GetMapping("{id}")
     public ResponseEntity<CategoryDto>getCategoryById(@PathVariable("id") long categoryId){
