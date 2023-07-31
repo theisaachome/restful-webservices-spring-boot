@@ -30,7 +30,8 @@ public class CategoryServiceImpl implements  CategoryService{
 
     @Override
     public CategoryDto getCategoryById(long categoryId) {
-        return null;
+        var category = categoryRepos.findById(categoryId).orElseThrow(()->new ResourceNotFoundException("Category","ID",categoryId));
+        return modelMapper.map(category,CategoryDto.class);
     }
 
     @Override

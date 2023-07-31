@@ -30,6 +30,10 @@ public class CategoryController {
     }
     // update category
     // get Category by ID
+    @GetMapping("{id}")
+    public ResponseEntity<CategoryDto>getCategoryById(@PathVariable("id") long categoryId){
+        return  ResponseEntity.ok(categoryService.getCategoryById(categoryId));
+    }
     // delete category
     @DeleteMapping("{id}")
     public ResponseEntity<String> deleteCategory(@PathVariable("id") long categoryId){
