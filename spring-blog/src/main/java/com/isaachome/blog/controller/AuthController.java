@@ -1,4 +1,5 @@
 package com.isaachome.blog.controller;
+import com.isaachome.blog.payload.JwtResponseDto;
 import com.isaachome.blog.payload.LoginDto;
 import com.isaachome.blog.payload.RegisterDto;
 import com.isaachome.blog.service.AuthService;
@@ -20,8 +21,10 @@ public class AuthController {
     }
 
     @PostMapping(value = {"/login","/signin"})
-    public ResponseEntity<String> login(@RequestBody LoginDto loginDto){
-        return new ResponseEntity<>(authService.login(loginDto), HttpStatus.OK);
+    public ResponseEntity<JwtResponseDto> login(@RequestBody LoginDto loginDto){
+        var response= new JwtResponseDto();
+        response.setAccessToken(authService.login(loginDto));
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @PostMapping(value={"/register","/signup"})
