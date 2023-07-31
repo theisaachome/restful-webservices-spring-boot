@@ -41,7 +41,12 @@ public class CategoryServiceImpl implements  CategoryService{
 
     @Override
     public CategoryDto updateCategory(CategoryDto dto, long id) {
-        return null;
+        var category = categoryRepos.findById(id).orElseThrow(()-> new ResourceNotFoundException("Category","ID",id));
+        category.setName(dto.getName());
+        category.setDescription(dto.getDescription());
+        category.setId(id);
+        var updatedCategory = categoryRepos.save(category);
+        return modelMapper.map(updatedCategory,CategoryDto.class);
     }
 
     @Override
