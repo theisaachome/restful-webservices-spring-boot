@@ -1,9 +1,11 @@
 package com.isaachome.blog.service;
 
+import com.isaachome.blog.entity.Category;
 import com.isaachome.blog.entity.Post;
 import com.isaachome.blog.exception.ResourceNotFoundException;
 import com.isaachome.blog.payload.PostDTO;
 import com.isaachome.blog.payload.PostResponse;
+import com.isaachome.blog.repos.CategoryRepos;
 import com.isaachome.blog.repos.PostRepos;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
@@ -18,16 +20,21 @@ import java.util.stream.Collectors;
 @Service
 public class PostServiceImpl implements   PostService{
     private final PostRepos repos;
-    private ModelMapper mapper;
+    private  final CategoryRepos categoryRepos;
+    private final ModelMapper mapper;
 
-    public PostServiceImpl(PostRepos repos,ModelMapper mapper) {
+    public PostServiceImpl(PostRepos repos,ModelMapper mapper, CategoryRepos categoryRepos) {
         this.repos = repos;
         this.mapper=mapper;
+        this.categoryRepos =categoryRepos;
     }
 
     @Override
     public PostDTO createPost(PostDTO data) {
+        // find category by ID
+        var category =categoryRepos.findById(data.getCategoryId()).orElseThrow(()->new ResourceNotFoundException("Category","ID",data.getCategoryId()));
         Post post = mapToPost(data);
+        post.setCategory(category);
         Post newPost=repos.save(post);
         return mapToDTO(newPost);
     }
@@ -39,7 +46,7 @@ public class PostServiceImpl implements   PostService{
         Page<Post> posts = repos.findAll(pageable);
         List<Post> listOfPosts = posts.getContent();
        List<PostDTO> contents= listOfPosts.stream().map(this::mapToDTO).collect(Collectors.toList());
-        PostResponse postResponse = new PostResponse(
+       return  new PostResponse(
                 contents,
                 posts.getNumber(),
                 posts.getSize(),
@@ -47,8 +54,6 @@ public class PostServiceImpl implements   PostService{
                 posts.getTotalPages(),
                 posts.isLast()
         );
-        return  postResponse;
-
     }
 
     @Override
@@ -59,19 +64,37 @@ public class PostServiceImpl implements   PostService{
 
     @Override
     public PostDTO updatePost(PostDTO dto, long id) {
-        Post post = repos.findById(id).orElseThrow(()->new ResourceNotFoundException("Post","id",id));
-        post.setTitle(dto.getTitle());
-        post.setDescription(dto.getDescription());
-        post.setContent(dto.getContent());
-        Post updatedPost=repos.save(post);
-        return mapToDTO(updatedPost);
+        Category category = categoryRepos.findById(dto.getCategoryId()).orElseThrow(()->new ResourceNotFoundException("Category","ID",dto.getCategoryId()));
+      if(category!=null){
+          Post post = repos.findById(id).orElseThrow(()->new ResourceNotFoundException("Post","id",id));
+          post.setTitle(dto.getTitle());
+          post.setDescription(dto.getDescription());
+          post.setContent(dto.getContent());
+          post.setCategory(category);
+          Post updatedPost=repos.save(post);
+          return mapToDTO(updatedPost);
+      }
+      return  null;
     }
+
 
     @Override
     public void deletePost(long id) {
       Post post=  repos.findById(id).orElseThrow(()-> new ResourceNotFoundException("Post","id",id));
       repos.delete(post);
     }
+
+    // get All posts by Category
+    @Override
+    public List<PostDTO> getPostsByCategoryId(long categoryId) {
+        Category category = categoryRepos.findById(categoryId).orElseThrow(()->new ResourceNotFoundException("Category","ID",categoryId));
+        if(category!=null){
+            var postsByCategoryId = repos.findPostsByCategoryId(categoryId);
+            return postsByCategoryId.stream().map((element) -> mapper.map(element, PostDTO.class)).collect(Collectors.toList());
+        }
+        return null;
+    }
+
     // convert Entity into DTO
     private  PostDTO mapToDTO(Post post){
 //        PostDTO postDTO  = new PostDTO(post.getId(),post.getTitle(),post.getDescription(),post.getContent());
