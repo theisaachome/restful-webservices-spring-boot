@@ -1,4 +1,4 @@
-package com.isaachome.blog.entity;
+package com.isaachome.bookstore.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Entity
 @Table(name = "Posts")
-public class Post {
+public class Book {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
