@@ -1,5 +1,7 @@
 package com.isaachome.bookstore.controller;
 
+import com.isaachome.bookstore.dto.AuthorDTO;
+import com.isaachome.bookstore.service.AuthorService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -10,20 +12,27 @@ import java.util.List;
 @RequestMapping("/api/v1/authors")
 public class AuthorController {
 
+    private final AuthorService authorService;
+
+    public AuthorController(AuthorService authorService) {
+        this.authorService = authorService;
+    }
+
     // create new author
     @PostMapping
-    public ResponseEntity<String> createAuthor(){
-     return  new ResponseEntity<>("Created", HttpStatus.CREATED);
+    public ResponseEntity<AuthorDTO> createAuthor(@RequestBody AuthorDTO dto){
+        var newAuthor = authorService.createAuthor(dto);
+     return  new ResponseEntity<>(newAuthor, HttpStatus.CREATED);
     }
     // get all Authors
     @GetMapping
-    public List<String> getAllAuthor(){
-        return  List.of("All","Author");
+    public List<AuthorDTO> getAllAuthor(){
+        return  authorService.getAllAuthor();
     }
     // get author by id
     @GetMapping("{id}")
-    public ResponseEntity<String> getAuthor(@PathVariable("id") long author_id){
-        return  new ResponseEntity<>("",HttpStatus.OK);
+    public ResponseEntity<AuthorDTO> getAuthor(@PathVariable("id") long author_id){
+        return  new ResponseEntity<>(authorService.getAuthorById(author_id),HttpStatus.OK);
     }
     // update author
     @PutMapping
@@ -34,6 +43,7 @@ public class AuthorController {
     // delete author
     @DeleteMapping("{id}")
     public ResponseEntity<String> deleteAuthor(@PathVariable("id")long author_id){
-        return  new ResponseEntity<>("Deleted",HttpStatus.ACCEPTED);
+        authorService.deleteAuthor(author_id);
+        return  new ResponseEntity<>("Resource deleted successfully",HttpStatus.ACCEPTED);
     }
 }
