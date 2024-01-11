@@ -44,7 +44,18 @@ public class AuthorServiceImpl implements AuthorService{
 
     @Override
     public AuthorDTO updateAuthor(long author_id, AuthorDTO dto) {
-        return null;
+        // find Author
+        var author = authorRepos.findById(author_id).orElseThrow(()->new ResourceNotFoundException("Author","ID",author_id));
+            author.setId(author_id);
+            author.setName(dto.getName());
+            author.setFirstName(dto.getFirstName());
+            author.setLastName(dto.getLastName());
+            author.setAddress(dto.getAddress());
+            author.setNational(dto.getNational());
+            author.setCountry(dto.getCountry());
+//            author.setUuid(d);
+        var updatedAuthor = authorRepos.save(author);
+        return mapToDTO(updatedAuthor);
     }
 
     @Override

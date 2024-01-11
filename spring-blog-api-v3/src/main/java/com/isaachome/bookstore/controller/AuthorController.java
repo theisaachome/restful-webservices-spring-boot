@@ -35,10 +35,11 @@ public class AuthorController {
         return  new ResponseEntity<>(authorService.getAuthorById(author_id),HttpStatus.OK);
     }
     // update author
-    @PutMapping
-    public ResponseEntity<String> updateAuthor(@PathVariable("id")long author_id,
-                                               @RequestBody String dto){
-        return new ResponseEntity<>("Update",HttpStatus.OK);
+    @PutMapping("{id}")
+    public ResponseEntity<AuthorDTO> updateAuthor(@PathVariable("id")long author_id,
+                                               @RequestBody AuthorDTO dto){
+
+        return new ResponseEntity<>(authorService.updateAuthor(author_id,dto),HttpStatus.OK);
     }
     // delete author
     @DeleteMapping("{id}")
