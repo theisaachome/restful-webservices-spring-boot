@@ -1,10 +1,15 @@
 package com.isaachome.bookstore.service;
 
 import com.isaachome.bookstore.dto.AuthorDTO;
+import com.isaachome.bookstore.dto.AuthorResponse;
 import com.isaachome.bookstore.entity.Author;
 import com.isaachome.bookstore.exception.ResourceNotFoundException;
 import com.isaachome.bookstore.repos.AuthorRepos;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -32,8 +37,21 @@ public class AuthorServiceImpl implements AuthorService{
     }
 
     @Override
-    public List<AuthorDTO> getAllAuthor() {
-        return authorRepos.findAll().stream().map(this::mapToDTO).toList();
+    public AuthorResponse getAllAuthor(int pageNo,int pageSize,String sortBy) {
+        // create pageable instance
+        Pageable pageable = PageRequest.of(pageNo,pageSize, Sort.by(sortBy));
+       Page<Author> authorPage = authorRepos.findAll(pageable);
+       // get Content from Page
+        List<Author> authorList = authorPage.getContent();
+        List<AuthorDTO> content = authorList.stream().map(this::mapToDTO).toList();
+        AuthorResponse authorResponse= new AuthorResponse();
+        authorResponse.setContents(content);
+        authorResponse.setPageSize(authorPage.getSize());
+        authorResponse.setPageNo(authorPage.getNumber());
+        authorResponse.setTotalElement(authorPage.getTotalElements());
+        authorResponse.setTotalPage(authorPage.getTotalPages());
+        authorResponse.setLast(authorPage.isLast());
+        return  authorResponse;
     }
 
     @Override

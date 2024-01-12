@@ -1,6 +1,7 @@
 package com.isaachome.bookstore.controller;
 
 import com.isaachome.bookstore.dto.AuthorDTO;
+import com.isaachome.bookstore.dto.AuthorResponse;
 import com.isaachome.bookstore.service.AuthorService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,9 +26,19 @@ public class AuthorController {
      return  new ResponseEntity<>(newAuthor, HttpStatus.CREATED);
     }
     // get all Authors
+    // get All with paging
+    // localhost:8080/api/v1/authors? pageSize=5&pageNum=1
+//    @GetMapping
+//    public List<AuthorDTO> getAllAuthor(){
+//        return  authorService.getAllAuthor();
+//    }
     @GetMapping
-    public List<AuthorDTO> getAllAuthor(){
-        return  authorService.getAllAuthor();
+    public AuthorResponse getAllAuthor(
+                                        @RequestParam(value = "pageNo" ,defaultValue = "0",required = false) int pageNo,
+                                        @RequestParam(value = "pageSize",defaultValue = "10",required = false) int pageSize,
+                                        @RequestParam(value = "sortBy",defaultValue = "id",required = false)String sortBy){
+//        return  authorService.getAllAuthor(pageNo,pageSize);
+        return  authorService.getAllAuthor(pageNo,pageSize,sortBy);
     }
     // get author by id
     @GetMapping("{id}")
