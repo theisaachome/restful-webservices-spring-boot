@@ -37,9 +37,11 @@ public class AuthorServiceImpl implements AuthorService{
     }
 
     @Override
-    public AuthorResponse getAllAuthor(int pageNo,int pageSize,String sortBy) {
+    public AuthorResponse getAllAuthor(int pageNo,int pageSize,String sortBy,String sortDir) {
+        Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name())? Sort.by(sortBy).ascending()
+                :Sort.by(sortBy).descending();
         // create pageable instance
-        Pageable pageable = PageRequest.of(pageNo,pageSize, Sort.by(sortBy));
+        Pageable pageable = PageRequest.of(pageNo,pageSize,sort);
        Page<Author> authorPage = authorRepos.findAll(pageable);
        // get Content from Page
         List<Author> authorList = authorPage.getContent();
