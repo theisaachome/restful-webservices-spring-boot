@@ -2,6 +2,7 @@ package com.isaachome.bookstore.service;
 
 import com.isaachome.bookstore.dto.BookDTO;
 import com.isaachome.bookstore.entity.Book;
+import com.isaachome.bookstore.exception.ResourceNotFoundException;
 import com.isaachome.bookstore.repos.BookRepos;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -15,9 +16,9 @@ public class BookServiceImpl implements BookService {
     private final ModelMapper modelMapper;
 
     @Override
-    public BookDTO getPostById(Long postId) {
-        postRepos.findById(postId);
-        return null;
+    public BookDTO getBookById(Long postId) {
+       var book= postRepos.findById(postId).orElseThrow(()-> new ResourceNotFoundException("Book ","ID",postId));
+        return convertToDto(book);
     }
 
     @Override
