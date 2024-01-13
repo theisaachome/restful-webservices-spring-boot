@@ -5,17 +5,23 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.UUID;
+
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class PostDTO {
+public class BookDTO {
 
     private long id;
-   private String title;
+    private String title;
     private String description;
-    private String content;
+    private double unitPrice;
+    private  int inStockNumber;
+    private String publisher;
+    private int pages;
+    private int edition;
+    private String tags;
+
 
 }
-//public record PostDTO(long id,String title,String description,String content) {
-//}
