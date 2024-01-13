@@ -1,6 +1,7 @@
 package com.isaachome.bookstore.service;
 
 import com.isaachome.bookstore.dto.BookDTO;
+import com.isaachome.bookstore.dto.BookResponse;
 import com.isaachome.bookstore.entity.Book;
 import com.isaachome.bookstore.exception.ResourceNotFoundException;
 import com.isaachome.bookstore.repos.BookRepos;
@@ -25,6 +26,11 @@ public class BookServiceImpl implements BookService {
     public BookDTO createBook(BookDTO dto) {
         Book savedBook = postRepos.save(convertToEntity(dto));
         return convertToDto(savedBook);
+    }
+
+    @Override
+    public BookResponse getAllBook(int pageNo, int pageSize, String sortBy, String sortDir) {
+        return null;
     }
 
     private Book convertToEntity(BookDTO dto){
