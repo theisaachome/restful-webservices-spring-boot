@@ -21,7 +21,6 @@ public class BookController {
     // get A list of posts
     @GetMapping
     public List<BookDTO> getBooks(){
-
     return  List.of(null,null,null);
     }
 
