@@ -58,7 +58,16 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public BookDTO updateBook(Long bookId, BookDTO dto) {
-       return null;
+        var book= bookRepos.findById(bookId).orElseThrow(()-> new ResourceNotFoundException("Book "," ID ",bookId));
+           book.setTitle(dto.getTitle());
+           book.setPages(dto.getPages());
+           book.setPublisher(dto.getPublisher());
+           book.setEdition(dto.getEdition());
+           book.setTags(dto.getTags());
+           book.setDescription(dto.getDescription());
+           book.setUnitPrice(dto.getUnitPrice());
+           var updatedBook=bookRepos.save(book);
+        return this.convertToDto(updatedBook);
     }
 
     @Override
