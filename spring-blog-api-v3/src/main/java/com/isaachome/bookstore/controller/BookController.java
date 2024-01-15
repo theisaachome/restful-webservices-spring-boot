@@ -39,5 +39,13 @@ public class BookController {
         return  new ResponseEntity<>(newPost,HttpStatus.CREATED);
     }
 
+    // delete book by Id
+    // localhost:8080/api/v1/books
+    @DeleteMapping("id")
+    public  ResponseEntity<String> deleteByID(@PathVariable("id") long book_id){
+        bookService.deleteById(book_id);
+      return new ResponseEntity<>("Deleted",HttpStatus.OK);
+    }
+
 
 }
