@@ -56,6 +56,17 @@ public class BookServiceImpl implements BookService {
         return bookResponse;
     }
 
+    @Override
+    public BookDTO updateBook(Long bookId, BookDTO dto) {
+       return null;
+    }
+
+    @Override
+    public void deleteById(Long bookId) {
+        var book= bookRepos.findById(bookId).orElseThrow(()-> new ResourceNotFoundException("Book "," ID ",bookId));
+        bookRepos.delete(book);
+    }
+
     private Book convertToEntity(BookDTO dto){
          return modelMapper.map(dto, Book.class);
     }

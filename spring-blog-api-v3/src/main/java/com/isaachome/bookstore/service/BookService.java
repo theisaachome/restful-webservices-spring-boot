@@ -8,4 +8,5 @@ public interface BookService {
     BookDTO createBook(BookDTO dto);
     BookResponse getAllBook(int pageNo, int pageSize,String sortBy,String sortDir);
     BookDTO updateBook(Long bookId,BookDTO dto);
+    void deleteById(Long bookId);
 }
