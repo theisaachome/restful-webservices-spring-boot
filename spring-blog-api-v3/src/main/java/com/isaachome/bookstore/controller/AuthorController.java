@@ -8,8 +8,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
 @RequestMapping("/api/v1/authors")
 public class AuthorController {
@@ -37,7 +35,7 @@ public class AuthorController {
     public AuthorResponse getAllAuthor(
                                         @RequestParam(value = "pageNo" ,defaultValue = AppConstants.DEFAULT_PAGE_NUMBER,required = false) int pageNo,
                                         @RequestParam(value = "pageSize",defaultValue = AppConstants.DEFAULT_PAGE_SIZE,required = false) int pageSize,
-                                        @RequestParam(value = "sortBy",defaultValue = AppConstants.DEFAULT_SORT_BY_ID,required = false)String sortBy,
+                                        @RequestParam(value = "sortBy",defaultValue = AppConstants.DEFAULT_SORT_BY,required = false)String sortBy,
                                         @RequestParam(value = "sortDir",defaultValue =AppConstants.DEFAULT_SORT_DIRECTION,required = false)String sortDir){
 //        return  authorService.getAllAuthor(pageNo,pageSize);
         return  authorService.getAllAuthor(pageNo,pageSize,sortBy,sortDir);

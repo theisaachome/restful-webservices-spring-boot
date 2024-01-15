@@ -1,12 +1,12 @@
 package com.isaachome.bookstore.controller;
 
 import com.isaachome.bookstore.dto.BookDTO;
+import com.isaachome.bookstore.dto.BookResponse;
 import com.isaachome.bookstore.service.BookService;
+import com.isaachome.bookstore.utils.AppConstants;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/books")
@@ -20,8 +20,12 @@ public class BookController {
 
     // get A list of posts
     @GetMapping
-    public List<BookDTO> getBooks(){
-    return  List.of(null,null,null);
+    public ResponseEntity<BookResponse> getBooks(@RequestParam(name="pageNo",defaultValue = AppConstants.DEFAULT_PAGE_NUMBER,required = false) int pageNo,
+                                                 @RequestParam(name = "pageSize",defaultValue = AppConstants.DEFAULT_PAGE_SIZE,required = false) int pageSize,
+                                                 @RequestParam(name = "sortBy",defaultValue = AppConstants.DEFAULT_SORT_BY,required = false)String sortBy,
+                                                 @RequestParam(name = "sortDir",defaultValue = AppConstants.DEFAULT_SORT_DIRECTION,required = false)String sortDir){
+      var bookResponse=  bookService.getAllBook(pageNo,pageSize,sortBy,sortDir);
+    return  new ResponseEntity<>(bookResponse,HttpStatus.OK);
     }
 
     // get post by ID
