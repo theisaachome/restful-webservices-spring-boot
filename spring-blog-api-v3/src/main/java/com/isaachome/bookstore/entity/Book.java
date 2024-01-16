@@ -5,6 +5,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -31,4 +34,7 @@ public class Book {
     private int edition;
     @Column(name = "tags",nullable = false)
     private String tags;
+
+    @OneToMany(mappedBy = "book")
+    private List<Author> authors = new ArrayList<>();
 }

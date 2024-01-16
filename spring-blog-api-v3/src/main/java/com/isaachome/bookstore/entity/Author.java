@@ -30,4 +30,8 @@ public class Author {
     private String national;
     @Column(name = "country")
     private String country;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "book_id",nullable = false)
+    private  Book book;
 }
