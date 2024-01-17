@@ -22,4 +22,6 @@ public class Address {
     private String state;
     private  String zipcode;
     private  String country;
+    @OneToOne(mappedBy = "address")
+    private Customer customer;
 }
