@@ -5,12 +5,14 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter
 @Setter
 @AllArgsConstructor
 @RequiredArgsConstructor
 @Entity
-@Table(name="book_authors")
+@Table(name="authors")
 public class Author {
 
     @Id
@@ -31,7 +33,10 @@ public class Author {
     @Column(name = "country")
     private String country;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "book_id",nullable = false)
-    private  Book book;
+    @ManyToMany
+    @JoinTable(
+            name = "author_books",
+    joinColumns = @JoinColumn(name = "author_fk"),
+    inverseJoinColumns = @JoinColumn(name = "book_fk"))
+    private List<Book> authorBooks;
 }

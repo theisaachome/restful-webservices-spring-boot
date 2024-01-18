@@ -35,6 +35,6 @@ public class Book {
     @Column(name = "tags",nullable = false)
     private String tags;
 
-    @OneToMany(mappedBy = "book")
+    @ManyToMany(mappedBy = "authorBooks")
     private List<Author> authors = new ArrayList<>();
 }
