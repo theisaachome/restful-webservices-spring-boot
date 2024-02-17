@@ -2,6 +2,7 @@ package com.isaachome.job.service.services;
 
 import com.isaachome.job.service.entity.Job;
 import com.isaachome.job.service.exception.ResourceNotFoundException;
+import com.isaachome.job.service.repos.CompanyRepos;
 import com.isaachome.job.service.repos.JobRepos;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -13,6 +14,7 @@ import java.util.List;
 @Service
 public class JobServiceImpl implements JobService{
     private final JobRepos jobRepos;
+    private  final CompanyRepos companyRepos;
     @Override
     public List<Job> getAllJob() {
         return jobRepos.findAll();
@@ -25,9 +27,13 @@ public class JobServiceImpl implements JobService{
 
     @Override
     public Job createJob(Job data) {
+        // find Company from Database
+        var company = companyRepos.findById(data.getCompany().getId()).orElseThrow(()-> new ResourceNotFoundException("Company","ID",data.getCompany().getId()));
         var job = new Job();
         job.setJobTitle(data.getJobTitle());
         job.setJobDescription(data.getJobDescription());
+        job.setCompany(company);
+        company.addJob(job);
         job.setJobType(data.getJobType());
         job.setActive(data.isActive());
         job.setLocation(data.getLocation());
